@@ -7,8 +7,7 @@ import android.widget.ArrayAdapter;
  */
 
 public class Item {
-    String category, name;
-    String weight, value;
+    String category, name, weight, value;
 
     public Item(String category, String name, String weight, String value ) {
         this.category = category;

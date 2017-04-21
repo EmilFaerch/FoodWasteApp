@@ -99,7 +99,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
-        android:text="Meat *"
+        android:text="Meat"
         app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintLeft_toLeftOf="@+id/btnMeat"
         app:layout_constraintRight_toRightOf="@+id/btnMeat"
@@ -272,7 +272,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
-        android:text="Fruit *"
+        android:text="Fruit"
         app:layout_constraintLeft_toLeftOf="@+id/btnFruit"
         app:layout_constraintRight_toRightOf="@+id/btnFruit"
         app:layout_constraintTop_toBottomOf="@+id/btnFruit" />

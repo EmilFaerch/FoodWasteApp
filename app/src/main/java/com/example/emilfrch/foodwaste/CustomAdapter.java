@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Created by Emil Færch on 14-04-2017.
  */
 
-public class CustomAdapter<Item> extends ArrayAdapter<Item> {
+public class CustomAdapter extends ArrayAdapter<Item> {
 
     Context context;
+    ArrayList<String> items;
 
     // View lookup cache
     private static class ViewHolder {
@@ -24,8 +26,8 @@ public class CustomAdapter<Item> extends ArrayAdapter<Item> {
         TextView txtInfo;
     }
 
-    public CustomAdapter(Context context, int i) {
-        super(context, i);
+    public CustomAdapter(Context context, ArrayList<Item> items) {
+        super(context, R.layout.row_item);
         this.context=context;
     }
 
@@ -37,8 +39,7 @@ public class CustomAdapter<Item> extends ArrayAdapter<Item> {
         ViewHolder viewHolder = new ViewHolder(); // view lookup cache stored in tag
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-           // LayoutInflater inflater = LayoutInflater.from(getContext());
-            View view = inflater.inflate(R.layout.row_item, null, true);
+        View view = inflater.inflate(R.layout.row_item, null, true);
 
         viewHolder.txtName = (TextView) view.findViewById(R.id.txtName);
         viewHolder.txtName.setText("Title");
@@ -49,7 +50,6 @@ public class CustomAdapter<Item> extends ArrayAdapter<Item> {
             convertView.setTag(viewHolder);
             viewHolder = (ViewHolder) convertView.getTag();
 
-        assert item != null;
         viewHolder.txtName.setText(item.getName());
         viewHolder.txtInfo.setText(item.getValue());
         // Return the completed view to render on screen

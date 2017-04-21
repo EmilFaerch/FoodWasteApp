@@ -20,15 +20,21 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class ItemsActivity extends AppCompatActivity {
     File fileItems;
     String category, item, weight, value;
     ListView listView;
-    //ArrayAdapter<String> items;
-    CustomAdapter<Item> items;
-    LayoutInflater inflater;
-    View row;
+    ArrayAdapter<String> items;
+
+    TextView tName, tInfo;
+
+    LinearLayout row;
+
+    int position = 0;
+
+    ArrayAdapter adapter;
 
     boolean pickItem = false;
     String itemValue;
@@ -39,24 +45,11 @@ public class ItemsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
-
-        fileItems = new File(getExternalFilesDir(null)+"/items.txt");
-
-        inflater = LayoutInflater.from(this);
-        row = (LinearLayout) inflater.inflate(R.layout.row_item, listView, false);
-       // items = new CustomAdapter(getApplicationContext(), 0);
-        // items =  new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        fileItems = new File(getExternalFilesDir(null) + "/items.txt");
 
         listView = (ListView) findViewById(R.id.listItems);
 
-        // Assign adapter to ListView
-        listView.setAdapter(items);
-
-        TextView txtName = (TextView) findViewById(R.id.txtName);
-        TextView txtInfo = (TextView) findViewById(R.id.txtInfo);
-
-        listView.addView(txtName);
-        listView.addView(txtInfo);
+        items = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
         if (getIntent().getExtras().getString("chosenCategory") != null) {
             chosenCategory = (getIntent().getExtras().getString("chosenCategory"));
@@ -65,25 +58,25 @@ public class ItemsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(chosenCategory + " products");
 
+        listView.setAdapter(items);
+
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                itemValue = (String) listView.getItemAtPosition(position);
+                pickItem = true;
+                itemAdd(null);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         readFile(null);
-
-            // ListView Item Click Listener
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    itemValue = (String) listView.getItemAtPosition(position);
-                    pickItem = true;
-                    itemAdd(null);
-                }
-            });
-        }
-
-/*        public void onStart(){
-            super.onStart();
-
-            readFile();
-        } */
+    }
 
     public void itemAdd(View v) {
         if (!pickItem) itemValue = null;
@@ -96,22 +89,6 @@ public class ItemsActivity extends AppCompatActivity {
 
     private void readFile(View v){
         try {
-            /*
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View row = (LinearLayout) inflater.inflate(R.layout.row_item, listView, false);
-            items = new CustomAdapter(getApplicationContext());
-
-            listView = (ListView) findViewById(R.id.listItems);
-
-            // Assign adapter to ListView
-            listView.setAdapter(items);
-
-            listView.addView(row);
-            //inflater.inflate(R.layout.row_item, listView, true);
-           // inflater.inflate(R.layout.row_item, listView); */
-
-
-
             // * Don't know wtf this means
             // Attaching BufferedReader to the FileInputStream by the help of InputStreamReader
             FileInputStream fis = new FileInputStream(fileItems);
@@ -122,13 +99,11 @@ public class ItemsActivity extends AppCompatActivity {
                 item = inputReader.readLine();
                 weight = inputReader.readLine();
                 value = inputReader.readLine();
-                int intWeight = Integer.parseInt(weight);
-                int intValue = Integer.parseInt(value);
 
-                if (category.equals(chosenCategory)) {
-                    // items.add(new Item(category, item, weight, value));
-                    Toast.makeText(this, "Found relevant stuff and didnt crash!", Toast.LENGTH_SHORT).show();
-                }
+                    if (category.equals(chosenCategory)) {
+                        items.add(item);
+                        Toast.makeText(this, item, Toast.LENGTH_SHORT).show();
+                    }
             }
             inputReader.close();
             fis.close();

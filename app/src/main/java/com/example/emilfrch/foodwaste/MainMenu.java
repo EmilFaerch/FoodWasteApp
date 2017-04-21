@@ -69,7 +69,7 @@ public class MainMenu extends AppCompatActivity {
                     writer.close();
                     fos.close();
                     fos.flush();
-                    Toast.makeText(this, fileItems.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Created default basic database", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
                 }

@@ -34,8 +34,8 @@ public class LogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        fileItems = new File(getExternalFilesDir(null)+"/items.txt");
-        fileData = new File(getExternalFilesDir(null)+"/data.txt");
+        fileItems = new File(getExternalFilesDir(null) + "/items.txt");
+        fileData = new File(getExternalFilesDir(null) + "/data.txt");
         chosenCategory = getIntent().getExtras().getString("chosenCategory");
 
         toolbar.setTitle("Submitting new " + chosenCategory + " item");
@@ -47,7 +47,7 @@ public class LogActivity extends AppCompatActivity {
             toolbar.setTitle("Logging " + clickedItem);
             itemName.setText(clickedItem);
             newItem = false;
-         }
+        }
 
         // REASONS
         Spinner reasonSpinner = (Spinner) findViewById(R.id.spinReason);
@@ -56,7 +56,7 @@ public class LogActivity extends AppCompatActivity {
 
         adapterReason.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-         reasonSpinner.setAdapter(adapterReason);
+        reasonSpinner.setAdapter(adapterReason);
 
         // Waste Percentage Text
         final TextView percent = (TextView) findViewById(R.id.txtPercent);
@@ -64,10 +64,12 @@ public class LogActivity extends AppCompatActivity {
         waste.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -76,55 +78,8 @@ public class LogActivity extends AppCompatActivity {
         });
     }
 
-    public void newItem(String category, String item, String weight, String value){ // We're adding a new item
-        String mCategory = category;
-        String mItem = item;
-        String mWeight = weight;
-        String mValue = value;
-        String intValue = mValue;
-
-        try { // Check to see if the item already exists in the "database" by reading the "items"
-            FileInputStream fis = new FileInputStream(fileItems);
-            BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis));
-
-            // Reading data line by line and storing it into the stringbuffer
-            while ((category = inputReader.readLine()) != null) {
-                loggedItem = inputReader.readLine();
-                value = inputReader.readLine();
-
-                if (mCategory.equals(category) && mItem.equals(loggedItem) && mValue.equals(value)) {
-                        inputReader.close();
-                        fis.close();
-                        return; //
-                    } else {
-                    Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list: '" + chosenCategory + " products'", Toast.LENGTH_SHORT).show();
-                    return; // Stop the function if we find a matching item - we don't want to add it again.
-                    }
-            }
-            inputReader.close();
-            fis.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "Encountered an error reading from file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        try {
-            FileOutputStream fos = new FileOutputStream(fileItems, true);
-            OutputStreamWriter writer = new OutputStreamWriter(fos);
-            writer.write(category + "\n");
-            writer.write(item + "\n");
-            writer.write(weight + "\n");
-            writer.write(intValue + "\n");
-            writer.close();
-            fos.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "Encountered an error writing to file!\nItem has not been saved.", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void saveData(View view) {
-        EditText textWeight = (EditText) findViewById(R.id.boxWeight) ;
+        EditText textWeight = (EditText) findViewById(R.id.boxWeight);
         String weight = String.valueOf(textWeight.getText());
 
         EditText textItem = (EditText) findViewById(R.id.boxItem);
@@ -147,26 +102,71 @@ public class LogActivity extends AppCompatActivity {
 
         String log = MessageFormat.format("You threw out {0}% of {1} ({2})\nWasted {3} kr", percent, item, weight, waste);
 
-            try {
-                FileOutputStream fos = new FileOutputStream(fileData, true);
-                OutputStreamWriter writer = new OutputStreamWriter(fos);
-                writer.write(chosenCategory + "\n");
-                writer.write(item + "\n");
-                writer.write(weight + "\n");
-                writer.write(intValue + "\n");
-                writer.write(percent + "\n");
-                writer.write(reason + "\n");
-                writer.write(reflection + "\n");
-                writer.close();
-                fos.close();
-                Toast.makeText(this, log, Toast.LENGTH_SHORT).show();
+        try {
+            FileOutputStream fos = new FileOutputStream(fileData, true);
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            writer.write(chosenCategory + "\n");
+            writer.write(item + "\n");
+            writer.write(weight + "\n");
+            writer.write(intValue + "\n");
+            writer.write(percent + "\n");
+            writer.write(reason + "\n");
+            writer.write(reflection + "\n");
+            writer.close();
+            fos.close();
+            Toast.makeText(this, log, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        if (newItem == true) {
+            String compCategory = chosenCategory;
+            String compItem = item;
+            String compWeight = weight;
+            String compValue = value;
+
+            try { // Check to see if the item already exists in the "database" by reading the "items"
+                FileInputStream fis = new FileInputStream(fileItems);
+                BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis));
+
+                // Reading data line by line and storing it into the stringbuffer
+                while ((compCategory = inputReader.readLine()) != null) {
+                    compItem = inputReader.readLine();
+                    compWeight = inputReader.readLine();
+                    compValue = inputReader.readLine();
+
+                    if (chosenCategory.equals(compCategory) && item.equals(compItem) && weight.equals(compWeight) && value.equals(compValue)) { // Checking for existing item
+                        Toast.makeText(this, item + " == " + compItem, Toast.LENGTH_SHORT).show();
+                        inputReader.close();
+                        fis.close();
+                        newItem = false;
+                        Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list: '" + chosenCategory + " products'", Toast.LENGTH_SHORT).show();
+                        return; // If we find a match we stop the while-loop and ...
+                    }
+                }
+                inputReader.close();
+                fis.close();
             } catch (Exception e) {
-                Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Encountered an error reading from file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
             }
 
-        if (newItem){
-            newItem(chosenCategory, item, weight, value);
+                try {
+                    FileOutputStream fos = new FileOutputStream(fileItems, true);
+                    OutputStreamWriter writer = new OutputStreamWriter(fos);
+                    writer.write(chosenCategory + "\n");
+                    writer.write(item + "\n");
+                    writer.write(weight + "\n");
+                    writer.write(value + "\n");
+                    writer.close();
+                    fos.close();
+                    Toast.makeText(this, "New item '" + item + "' added!", Toast.LENGTH_SHORT).show();
+                    newItem = false;
+                } catch (Exception e) {
+                    Toast.makeText(this, "Encountered an error writing to file!\nItem has not been saved.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
-}
