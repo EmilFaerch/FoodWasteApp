@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.emilfrch.foodwaste.LogActivity"
+    tools:showIn="@layout/activity_log">
+
+    <EditText
+        android:id="@+id/boxItem"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:background="@android:drawable/alert_light_frame"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="textCapWords"
+        android:text=""
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtItem" />
+
+    <EditText
+        android:id="@+id/boxWeight"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:background="@android:drawable/alert_light_frame"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="textCapWords"
+        android:text=""
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtWeight" />
+
+    <TextView
+        android:id="@+id/txtItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Item"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Weight (gram)"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintTop_toBottomOf="@+id/boxItem" />
+
+    <TextView
+        android:id="@+id/txtInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Total value of item"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/boxWeight"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintHorizontal_bias="0.666" />
+
+    <EditText
+        android:id="@+id/boxValue"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="numberDecimal"
+        android:text="20"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintLeft_toLeftOf="@+id/txtInfo"
+        app:layout_constraintRight_toRightOf="@+id/txtInfo"
+        app:layout_constraintTop_toBottomOf="@+id/txtInfo" />
+
+    <TextView
+        android:id="@+id/txtKroner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:text="kr"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintRight_toRightOf="@+id/txtInfo"
+        app:layout_constraintTop_toTopOf="@+id/boxValue"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/boxValue"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtWaste"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="How much wasted?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/boxValue"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/boxItem" />
+
+    <SeekBar
+        android:id="@+id/seekWaste"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintTop_toBottomOf="@+id/txtWaste"
+        app:layout_constraintHorizontal_bias="0.125" />
+
+    <TextView
+        android:id="@+id/txtReason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Reason"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtPercent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/boxWeight"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/boxWeight"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <TextView
+        android:id="@+id/txtComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="4dp"
+        android:text="Comment"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintTop_toBottomOf="@+id/spinReason" />
+
+    <Spinner
+        android:id="@+id/spinReason"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:background="@android:drawable/alert_light_frame"
+        android:gravity="center_horizontal"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintTop_toBottomOf="@+id/txtReason"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <EditText
+        android:id="@+id/boxReflection"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-1dp"
+        android:background="@android:drawable/alert_light_frame"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:inputType="textLongMessage"
+        app:layout_constraintTop_toBottomOf="@+id/txtComment"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/spinReason"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="@+id/spinReason"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:onClick="saveData"
+        android:text="Add and Submit"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        app:layout_constraintRight_toRightOf="@+id/boxItem"
+        app:layout_constraintTop_toBottomOf="@+id/boxReflection" />
+
+    <TextView
+        android:id="@+id/txtPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="50%"
+        app:layout_constraintTop_toTopOf="@+id/seekWaste"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/boxItem"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/boxItem" />
+
+</android.support.constraint.ConstraintLayout>

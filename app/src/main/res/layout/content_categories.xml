@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.emilfrch.foodwaste.CategoriesActivity"
+    tools:showIn="@layout/activity_categories">
+
+    <TextView
+        android:id="@+id/txtSweets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:text="Sweets"
+        app:layout_constraintLeft_toLeftOf="@+id/btnSweets"
+        app:layout_constraintRight_toRightOf="@+id/btnSweets"
+        app:layout_constraintTop_toBottomOf="@+id/btnSweets" />
+
+    <TextView
+        android:id="@+id/txtVegetables"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:text="Vegetables"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/btnVegetables"
+        app:layout_constraintRight_toRightOf="@+id/btnVegetables"
+        app:layout_constraintTop_toBottomOf="@+id/btnVegetables" />
+
+    <TextView
+        android:id="@+id/txtOther"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:text="Other"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintLeft_toLeftOf="@+id/btnOther"
+        app:layout_constraintRight_toRightOf="@+id/btnOther"
+        app:layout_constraintTop_toBottomOf="@+id/btnOther" />
+
+    <ImageButton
+        android:id="@+id/btnSweets"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categorySweets"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnVegetables"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/btnVegetables"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:onClick="categoryVegetables"
+        app:layout_constraintLeft_toRightOf="@+id/btnMeat"
+        app:layout_constraintRight_toLeftOf="@+id/btnFish"
+        app:layout_constraintTop_toBottomOf="@+id/txtRicePasta"
+        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+
+    <ImageButton
+        android:id="@+id/btnOther"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categoryOther"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnVegetables"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/btnMeat"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categoryMeat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnRice"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/txtMeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Meat *"
+        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintLeft_toLeftOf="@+id/btnMeat"
+        app:layout_constraintRight_toRightOf="@+id/btnMeat"
+        app:layout_constraintTop_toBottomOf="@+id/btnMeat" />
+
+    <ImageButton
+        android:id="@+id/btnRice"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:onClick="categoryRice"
+        app:layout_constraintLeft_toRightOf="@+id/btnMeat"
+        app:layout_constraintRight_toLeftOf="@+id/btnFish"
+        app:layout_constraintTop_toBottomOf="@+id/txtFruit"
+        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+
+    <TextView
+        android:id="@+id/txtRicePasta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Rice and Pasta"
+        app:layout_constraintLeft_toLeftOf="@+id/btnRice"
+        app:layout_constraintRight_toRightOf="@+id/btnRice"
+        app:layout_constraintTop_toBottomOf="@+id/btnRice" />
+
+    <ImageButton
+        android:id="@+id/btnFish"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categorySeafood"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnRice"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/txtSeafood"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Seafood"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintLeft_toLeftOf="@+id/btnFish"
+        app:layout_constraintRight_toRightOf="@+id/btnFish"
+        app:layout_constraintTop_toBottomOf="@+id/btnFish" />
+
+    <ImageButton
+        android:id="@+id/btnCornProducts"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:onClick="categoryCorn"
+        app:layout_constraintLeft_toRightOf="@+id/btnBakery"
+        app:layout_constraintRight_toLeftOf="@+id/btnDairyProducts"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+
+    <ImageButton
+        android:id="@+id/btnBakery"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categoryBakery"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnCornProducts"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/btnDairyProducts"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categoryDairy"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnCornProducts"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/txtBread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Bakery"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintLeft_toLeftOf="@+id/btnBakery"
+        app:layout_constraintRight_toRightOf="@+id/btnBakery"
+        app:layout_constraintTop_toBottomOf="@+id/btnBakery" />
+
+    <TextView
+        android:id="@+id/txtCorn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Corn Products"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/btnCornProducts"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/btnCornProducts"
+        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnCornProducts" />
+
+    <TextView
+        android:id="@+id/txtLeftovers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Leftovers"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintLeft_toLeftOf="@+id/btnLeftovers"
+        app:layout_constraintRight_toRightOf="@+id/btnLeftovers"
+        app:layout_constraintTop_toBottomOf="@+id/btnLeftovers" />
+
+    <TextView
+        android:id="@+id/txtDairy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Dairy Products"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="@+id/btnDairyProducts"
+        app:layout_constraintRight_toRightOf="@+id/btnDairyProducts"
+        app:layout_constraintTop_toBottomOf="@+id/btnDairyProducts" />
+
+    <ImageButton
+        android:id="@+id/btnLeftovers"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categoryLeftovers"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnFruit"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/btnFruit"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:onClick="categoryFruits"
+        app:layout_constraintLeft_toRightOf="@+id/btnDrinks"
+        app:layout_constraintRight_toLeftOf="@+id/btnLeftovers"
+        app:layout_constraintTop_toBottomOf="@+id/txtCorn"
+        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+
+    <TextView
+        android:id="@+id/txtFruit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Fruit *"
+        app:layout_constraintLeft_toLeftOf="@+id/btnFruit"
+        app:layout_constraintRight_toRightOf="@+id/btnFruit"
+        app:layout_constraintTop_toBottomOf="@+id/btnFruit" />
+
+    <TextView
+        android:id="@+id/txtDrinks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="Drinks"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintLeft_toLeftOf="@+id/btnDrinks"
+        app:layout_constraintRight_toRightOf="@+id/btnDrinks"
+        app:layout_constraintTop_toBottomOf="@+id/btnDrinks" />
+
+    <ImageButton
+        android:id="@+id/btnDrinks"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="0dp"
+        android:onClick="categoryDrinks"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnFruit"
+        app:srcCompat="@mipmap/ic_launcher" />
+</android.support.constraint.ConstraintLayout>
