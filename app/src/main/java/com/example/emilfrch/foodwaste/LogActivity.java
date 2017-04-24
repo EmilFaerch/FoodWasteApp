@@ -24,9 +24,9 @@ import static java.lang.Integer.valueOf;
 
 public class LogActivity extends AppCompatActivity {
 
-    File fileItems, fileData;
-    String loggedItem = "", chosenCategory, clickedItem;
-    boolean newItem = true;
+    File fileItems, fileData; // Here we add the actual data-database to add the log entries
+    String chosenCategory, clickedItem, clickedWeight, clickedValue; // variables we sent from the previous activity
+    boolean newItem = true; // start our assuming it's a new item (that we clicked "+")
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,43 +34,56 @@ public class LogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        // Initialize both databases
         fileItems = new File(getExternalFilesDir(null) + "/items.txt");
         fileData = new File(getExternalFilesDir(null) + "/data.txt");
+
+        // get chosen category
         chosenCategory = getIntent().getExtras().getString("chosenCategory");
+        toolbar.setTitle("Submitting new " + chosenCategory + " item"); // Submitting new Fruit item
 
-        toolbar.setTitle("Submitting new " + chosenCategory + " item");
+        if (getIntent().getExtras().getString("clickedItem") != null) { // If the intent is not null, we've clicked an existing item from the list
+            clickedItem = (getIntent().getExtras().getString("clickedItem")); // get the name of the item we clicked, that we passed along from the last activity
+            clickedWeight = (getIntent().getExtras().getString("clickedWeight")); // get the weight
+            clickedValue = (getIntent().getExtras().getString("clickedValue")); // get value as well
+            toolbar.setTitle("Logging " + clickedItem); // Change the title, as we are not submitting a new item, we are logging an existing item
+            EditText itemName = (EditText) findViewById(R.id.boxItem); // initialize "item-name-box"-thing (EditText is a textbox)
+            EditText itemWeight = (EditText) findViewById(R.id.boxWeight);  // also the weight textbox
+            EditText itemValue = (EditText) findViewById(R.id.boxValue);
+            itemName.setText(clickedItem); // Put in the name of the clicked item
+            itemWeight.setText(clickedWeight); // and also the weight
+            itemValue.setText(clickedValue); // aaand also the price
 
-        if (getIntent().getExtras().getString("clickedItem") != null) {
-            // Set Item based on What you clicked in Fruits-activity
-            EditText itemName = (EditText) findViewById(R.id.boxItem);
-            clickedItem = (getIntent().getExtras().getString("clickedItem"));
-            toolbar.setTitle("Logging " + clickedItem);
-            itemName.setText(clickedItem);
-            newItem = false;
+            newItem = false; // not submitting a new item
         }
 
         // REASONS
-        Spinner reasonSpinner = (Spinner) findViewById(R.id.spinReason);
+        Spinner reasonSpinner = (Spinner) findViewById(R.id.spinReason); // A Spinner is a fucking Dropdown menu because ... logic?
 
+        // Like the listview, we use an adapter to populate the dropdown
         ArrayAdapter<CharSequence> adapterReason = ArrayAdapter.createFromResource(this, R.array.waste_reasons, android.R.layout.simple_spinner_item);
+        // R.array.waste_reasons is a String array defined in "res/values/strings.xml" that holds the reasons ^
 
         adapterReason.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        reasonSpinner.setAdapter(adapterReason);
+        reasonSpinner.setAdapter(adapterReason); // Apply the adapter to the dropdo... spinner, sorry.
 
-        // Waste Percentage Text
+        // Dynamically update Waste Percentage Text
         final TextView percent = (TextView) findViewById(R.id.txtPercent);
-        SeekBar waste = (SeekBar) findViewById(R.id.seekWaste);
-        waste.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        SeekBar waste = (SeekBar) findViewById(R.id.seekWaste); // SeekBar is a Slider .... these fucking names.
+        waste.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() { // Another listener, this time checking for when something is changed
 
+            // Has to be here ...
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
 
+            // eventhough we are only ...
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
+            // interested in this!
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 percent.setText(progress + "%");
@@ -78,7 +91,9 @@ public class LogActivity extends AppCompatActivity {
         });
     }
 
+    // Here comes the fun part of saving data
     public void saveData(View view) {
+        // Basically initializing the boxes and saving the values of them
         EditText textWeight = (EditText) findViewById(R.id.boxWeight);
         String weight = String.valueOf(textWeight.getText());
 
@@ -87,7 +102,7 @@ public class LogActivity extends AppCompatActivity {
 
         EditText textValue = (EditText) findViewById(R.id.boxValue);
         String value = String.valueOf(textValue.getText());
-        int intValue = Integer.parseInt(value);
+        int intValue = Integer.parseInt(value); // turn the String into a int, so we can MATH it
 
         SeekBar textPercent = (SeekBar) findViewById(R.id.seekWaste);
         String percent = String.valueOf(textPercent.getProgress());
@@ -98,15 +113,17 @@ public class LogActivity extends AppCompatActivity {
         EditText textReflection = (EditText) findViewById(R.id.boxReflection);
         String reflection = String.valueOf(textReflection.getText());
 
+        // We use a "long" for whatever reason (it doesn't crash) to round the "wasted money" up to a whole number, based on the percent wasted.
         long waste = Math.round(Double.parseDouble(value) * (Double.parseDouble(percent) / 100));
 
-        String log = MessageFormat.format("You threw out {0}% of {1} ({2})\nWasted {3} kr", percent, item, weight, waste);
+        String log = MessageFormat.format("You threw out {0}% of {1} ({2} gram)\nWasted {3} kr", percent, item, weight, waste); // Success message
 
-        try {
-            FileOutputStream fos = new FileOutputStream(fileData, true);
+        try { // try and access the data database
+            // This is what we'll be using for displaying data - it's time to figure out how the fuck we do that...
+            FileOutputStream fos = new FileOutputStream(fileData, true); // true for adding, false for overwriting
             OutputStreamWriter writer = new OutputStreamWriter(fos);
-            writer.write(chosenCategory + "\n");
-            writer.write(item + "\n");
+            writer.write(chosenCategory + "\n"); // adding "\n" to create a new line, otherwise it would write e.g: FruitApple20350Too OldVacation, which looks fucking horrible and useless for our formatting.
+            writer.write(item + "\n");           // follows the same format of the items list; category, item, weight, value, and then because this is the waste data we include percent, reason, and reflection
             writer.write(weight + "\n");
             writer.write(intValue + "\n");
             writer.write(percent + "\n");
@@ -114,35 +131,38 @@ public class LogActivity extends AppCompatActivity {
             writer.write(reflection + "\n");
             writer.close();
             fos.close();
-            Toast.makeText(this, log, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, log, Toast.LENGTH_SHORT).show(); // Display success message when we're done
         } catch (Exception e) {
-            Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show(); // Let them know there was an error
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Display that error, mostly for support purposes.
         }
+        // So, we've logged the data, but if it's a new item, we also want to add it to the items database
 
-        if (newItem == true) {
+        if (newItem) { // if we clicked the "+" button
             String compCategory = chosenCategory;
             String compItem = item;
             String compWeight = weight;
             String compValue = value;
 
-            try { // Check to see if the item already exists in the "database" by reading the "items"
+            try { // Check to see if the item already exists in the items database by reading through the "items"
                 FileInputStream fis = new FileInputStream(fileItems);
                 BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis));
 
-                // Reading data line by line and storing it into the stringbuffer
+                // Again, reading the file 4 lines at a time as previously
                 while ((compCategory = inputReader.readLine()) != null) {
                     compItem = inputReader.readLine();
                     compWeight = inputReader.readLine();
                     compValue = inputReader.readLine();
 
-                    if (chosenCategory.equals(compCategory) && item.equals(compItem) && weight.equals(compWeight) && value.equals(compValue)) { // Checking for existing item
-                        Toast.makeText(this, item + " == " + compItem, Toast.LENGTH_SHORT).show();
+                    // I wanted to display weight and value for each item, so you could have "Rye bread 500g 8 kroner" and "Rye bread 1000g 15 kroner", instead of having 1 rye bread for all,
+                    // but RelativeLayout was a bitch, so that's not happening. You can actually have different Rye Bread, but you wont be able to see it until you choose it.
+                    if (chosenCategory.equals(compCategory) && item.equals(compItem) && weight.equals(compWeight) && value.equals(compValue)) { // Checking for identical item
+                        Toast.makeText(this, item + " == " + compItem, Toast.LENGTH_SHORT).show(); //
                         inputReader.close();
                         fis.close();
-                        newItem = false;
+                        newItem = false; // not a new item
                         Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list: '" + chosenCategory + " products'", Toast.LENGTH_SHORT).show();
-                        return; // If we find a match we stop the while-loop and ...
+                        return; // If we find a match we stop the while-loop
                     }
                 }
                 inputReader.close();
@@ -152,6 +172,7 @@ public class LogActivity extends AppCompatActivity {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
             }
 
+            if (newItem) { // if there was no match in the items database, we're gonna add the item
                 try {
                     FileOutputStream fos = new FileOutputStream(fileItems, true);
                     OutputStreamWriter writer = new OutputStreamWriter(fos);
@@ -170,3 +191,4 @@ public class LogActivity extends AppCompatActivity {
             }
         }
     }
+}
