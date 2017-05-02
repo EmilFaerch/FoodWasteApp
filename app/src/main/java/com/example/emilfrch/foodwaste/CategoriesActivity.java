@@ -16,6 +16,7 @@ public class CategoriesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         toolbar.setTitle("Food Categories");
     }
 

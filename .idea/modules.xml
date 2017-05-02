@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FoodWaste.iml" filepath="$PROJECT_DIR$/FoodWaste.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FoodWasteApp.iml" filepath="$PROJECT_DIR$/FoodWasteApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/libraries/HoloGraphLibrary/HoloGraphLibrary.iml" filepath="$PROJECT_DIR$/app/libraries/HoloGraphLibrary/HoloGraphLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/libraries/libraries.iml" filepath="$PROJECT_DIR$/app/libraries/libraries.iml" />
     </modules>
   </component>
 </project>

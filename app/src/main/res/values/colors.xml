@@ -5,4 +5,11 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="col1">#4cff00</color>
+    <color name="col2">#00ff8c</color>
+    <color name="col3">#00ffbb</color>
+    <color name="col4">#00ffff</color>
+    <color name="col5">#00d4ff</color>
+    <color name="col6">#00aeff</color>
+    <color name="col7">#0084ff</color>
 </resources>

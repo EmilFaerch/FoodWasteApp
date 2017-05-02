@@ -17,14 +17,15 @@ import java.io.InputStreamReader;
 
 public class ItemsActivity extends AppCompatActivity {
 
-    File fileItems; // Data base file
+    // Initializing all the variables we need up here (globally), in case we need them in another function/method (not a different activity)
+    File fileItems; // Items database file
     String category, item, weight, value; // the strings for info - in this case is not really used other than going through the database
     ListView listView; // The ListView that lists the items
     ArrayAdapter<String> items; // The adapter that we put onto the listview to add items
     boolean pickItem = false; // Checking if we picked an existing item
     String itemValue; // Used to save the item name when logging an existing item
     String chosenCategory; // variable to keep track of what category we want to add to
-    String itemWeight;
+    String week, day; // Checking week- and day number (e.g. week 18, day 2 (tuesday)) - while these are technically numbers, we read strings from the file
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,11 @@ public class ItemsActivity extends AppCompatActivity {
         fileItems = new File(getExternalFilesDir(null) + "/items.txt"); // For our actual app we would only want it here and not in MainMenu to create a default data base.
 
         // this is how we receive the transferred variables
-        chosenCategory = (getIntent().getExtras().getString("chosenCategory")); // get the extra-string from the intent we used to call this activity that we called "chosenCategory" ...
-        // ... and put it into an actual variable called chosenCategory
+        chosenCategory = (getIntent().getExtras().getString("chosenCategory")); // get the extra-string, from the intent we used to call this activity, that we called "chosenCategory" ...
+        // ... and put it into an actual variable called chosenCategory - might as well keep it consistent
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         toolbar.setTitle(chosenCategory + " products"); // This will e.g display ("Fruit products") in the toolbar
 
         listView = (ListView) findViewById(R.id.listItems); // Initialize (or w/e) our ListView
@@ -73,16 +75,16 @@ public class ItemsActivity extends AppCompatActivity {
             FileInputStream fis = new FileInputStream(fileItems); // Again, we wanna access this file
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis)); // But now we're using a BufferedReader to read from the file.
 
-            // read a line and check if it's not empty; while it's not empty we continue to read from the code
-            while ((category = inputReader.readLine()) != null) { // Because of the way we formatted the database, if there's 1 line, there are at least 3 more to read from (4 for each item)
+            // read a line and check if it's not empty; we continue to read from the code while it's not empty
+            while ((category = inputReader.readLine()) != null) { // Because of the way we formatted the database, if there's 1 line, we know that there are at least 3 more to read from (4 for each item)
                 item = inputReader.readLine(); // So if there's a category (e.g. "Fruit"), we also read the next 3 lines, even though we don't use them, other than basically skipping through the database
                 weight = inputReader.readLine();
                 value = inputReader.readLine();
 
                     // So, if the category from the file (e.g. "Fruit") matches the category that we've kept track of that we are in (e.g. "Fruit");
-                    if (category.equals(chosenCategory)) { // we check to see if the string itself is equal to the other string ( the "==" check doesn't work here for some reason, found that out the hard way)
-                        items.add(item); // if the category matches, we want to add the item to the list
-                        // NOTICE THAT WE DON'T ADD THE ITEM TO THE LISTVIEW, BUT RATHER THE ADAPTER - you add items to adapter and it adds it to the listview
+                    if (category.equals(chosenCategory)) { // check to see if the string is equal to the other string ( the "==" check doesn't work here for some reason, found that out the hard way)
+                        items.add(item); // if the categories match, we want to add the item to the list
+                        // NOTICE THAT WE DON'T ADD THE ITEM TO THE LISTVIEW, BUT RATHER THE ADAPTER - you add items to an adapter and add the adapter to the listview (BECAUSE WHY MAKE IT SIMPLE)
                     }
             } // if there are no more lines in our database
             inputReader.close(); // Close that shit up
@@ -94,9 +96,11 @@ public class ItemsActivity extends AppCompatActivity {
     }
 
     // Accessing the Logging-activity
-    public void itemAdd(View v) { // We're using the same method for opening the new activity, so we need to see ...
-        if (!pickItem) itemValue = null; // ... if we didn't choose an existing item, then set the itemValue to null
-        // if we didn't choose an existing item, we must have pressed the "+" button
+    // We're using the same method for opening the new activity, so we need to see ...
+    public void itemAdd(View v) {
+        if (!pickItem) itemValue = null; // if we didn't choose an existing item, we must have pressed the "+" button and we would not want the "Item" field filled out in the next screen
+
+        // ... if we chose an existing item, then pass along all the values of that item, ready for easy logging
         Intent i = new Intent(ItemsActivity.this, LogActivity.class); //
         i.putExtra("chosenCategory", chosenCategory); // Pass the category along again so we know what to save the item as
         i.putExtra("clickedItem", itemValue); // and pass along the name of the chosen item as well (doesn't matter if it's null or not)

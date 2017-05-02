@@ -19,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.MessageFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import static java.lang.Integer.valueOf;
 
@@ -28,11 +30,18 @@ public class LogActivity extends AppCompatActivity {
     String chosenCategory, clickedItem, clickedWeight, clickedValue; // variables we sent from the previous activity
     boolean newItem = true; // start our assuming it's a new item (that we clicked "+")
 
+    Calendar cal = Calendar.getInstance(Locale.getDefault());
+    int viewDay = cal.get(Calendar.DAY_OF_WEEK); // viewWeek is the week we would like to see (By default we wanna see the current week)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // THIS IS IMPORTANT - used for logging to the right day
+        viewDay--; // Day 1 is Sunday ( I found out -_-' ), we obviously want Monday to be 1, so we subtract 1
+        if (viewDay == 0) viewDay = 7; // but when it's actually Sunday it'll be 1 - 1 = 0; so we set it to 7 (our Sunday)
 
         // Initialize both databases
         fileItems = new File(getExternalFilesDir(null) + "/items.txt");
@@ -85,7 +94,7 @@ public class LogActivity extends AppCompatActivity {
 
             // interested in this!
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { // When something changes we want to update the text
                 percent.setText(progress + "%");
             }
         });
@@ -113,7 +122,7 @@ public class LogActivity extends AppCompatActivity {
         EditText textReflection = (EditText) findViewById(R.id.boxReflection);
         String reflection = String.valueOf(textReflection.getText());
 
-        // We use a "long" for whatever reason (it doesn't crash) to round the "wasted money" up to a whole number, based on the percent wasted.
+        // We use a "long" for whatever reason (it doesn't crash, yay) to round the "wasted money" up to a whole number, based on the percent wasted.
         long waste = Math.round(Double.parseDouble(value) * (Double.parseDouble(percent) / 100));
 
         String log = MessageFormat.format("You threw out {0}% of {1} ({2} gram)\nWasted {3} kr", percent, item, weight, waste); // Success message
@@ -122,16 +131,19 @@ public class LogActivity extends AppCompatActivity {
             // This is what we'll be using for displaying data - it's time to figure out how the fuck we do that...
             FileOutputStream fos = new FileOutputStream(fileData, true); // true for adding, false for overwriting
             OutputStreamWriter writer = new OutputStreamWriter(fos);
-            writer.write(chosenCategory + "\n"); // adding "\n" to create a new line, otherwise it would write e.g: FruitApple20350Too OldVacation, which looks fucking horrible and useless for our formatting.
-            writer.write(item + "\n");           // follows the same format of the items list; category, item, weight, value, and then because this is the waste data we include percent, reason, and reflection
+            writer.write(Calendar.WEEK_OF_YEAR + "\n"); // adding the week number first
+            writer.write(viewDay + "\n"); // Day of week (1 for monday and so on) - adding "\n" to create a new line ...
+            writer.write(chosenCategory + "\n"); // ... otherwise it would write e.g: 192FruitApple20350Too OldVacation, which looks fucking horrible and useless for our formatting.
+            writer.write(item + "\n");           // follows the same format of the items list, then because this is the waste data we include percent, reason, and reflection
             writer.write(weight + "\n");
-            writer.write(intValue + "\n");
+            writer.write(waste + "\n");
             writer.write(percent + "\n");
             writer.write(reason + "\n");
             writer.write(reflection + "\n");
             writer.close();
             fos.close();
             Toast.makeText(this, log, Toast.LENGTH_SHORT).show(); // Display success message when we're done
+            Toast.makeText(this, "Logged in day #" + viewDay, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show(); // Let them know there was an error
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Display that error, mostly for support purposes.
