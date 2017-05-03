@@ -102,7 +102,7 @@ public class BarGraph extends View {
             canvas.drawColor(Color.TRANSPARENT);
             NinePatchDrawable popup = (NinePatchDrawable) this.getResources().getDrawable(R.drawable.popup_black);
 
-            float maxValue = -50; // was 0
+            float maxValue = 0; // -50; // was 0
             float padding = 10; // was 7
             int selectPadding = 4;
             float bottomPadding = 40;

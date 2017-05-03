@@ -34,11 +34,23 @@ public class LogActivity extends AppCompatActivity {
     int viewDay = cal.get(Calendar.DAY_OF_WEEK); // viewWeek is the week we would like to see (By default we wanna see the current week)
     int viewWeek = cal.get(Calendar.WEEK_OF_YEAR);
 
+    EditText textItem, textWeight, textValue, textReflection; SeekBar textPercent; Spinner textReason;
+
+    String weight, item, value, percent, reason, reflection, log;
+    long wasteMoney, wasteWeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+         textWeight = (EditText) findViewById(R.id.boxWeight);
+         textItem = (EditText) findViewById(R.id.boxItem);
+         textValue = (EditText) findViewById(R.id.boxValue);
+         textPercent = (SeekBar) findViewById(R.id.seekWaste);
+         textReason = (Spinner) findViewById(R.id.spinReason);
+         textReflection = (EditText) findViewById(R.id.boxReflection);
 
         // THIS IS IMPORTANT - used for logging to the right day
         viewDay--; // Day 1 is Sunday ( I found out -_-' ), we obviously want Monday to be 1, so we subtract 1
@@ -57,12 +69,9 @@ public class LogActivity extends AppCompatActivity {
             clickedWeight = (getIntent().getExtras().getString("clickedWeight")); // get the weight
             clickedValue = (getIntent().getExtras().getString("clickedValue")); // get value as well
             toolbar.setTitle("Logging " + clickedItem); // Change the title, as we are not submitting a new item, we are logging an existing item
-            EditText itemName = (EditText) findViewById(R.id.boxItem); // initialize "item-name-box"-thing (EditText is a textbox)
-            EditText itemWeight = (EditText) findViewById(R.id.boxWeight);  // also the weight textbox
-            EditText itemValue = (EditText) findViewById(R.id.boxValue);
-            itemName.setText(clickedItem); // Put in the name of the clicked item
-            itemWeight.setText(clickedWeight); // and also the weight
-            itemValue.setText(clickedValue); // aaand also the price
+            textItem.setText(clickedItem); // Put in the name of the clicked item
+            textWeight.setText(clickedWeight); // and also the weight
+            textValue.setText(clickedValue); // aaand also the price
 
             newItem = false; // not submitting a new item
         }
@@ -93,7 +102,7 @@ public class LogActivity extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
-            // interested in this!
+            // ... interested in this!
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { // When something changes we want to update the text
                 percent.setText(progress + "%");
@@ -103,32 +112,35 @@ public class LogActivity extends AppCompatActivity {
 
     // Here comes the fun part of saving data
     public void saveData(View view) {
-        // Basically initializing the boxes and saving the values of them
-        EditText textWeight = (EditText) findViewById(R.id.boxWeight);
-        String weight = String.valueOf(textWeight.getText());
+        if (weight == "" || item == "" || value == "") {
+            Toast.makeText(this, "You didn't fill out all of the fields!", Toast.LENGTH_SHORT).show();
+        } else {
+        try {
+            // Basically initializing the boxes and saving the values of them
+             weight = String.valueOf(textWeight.getText());
 
-        EditText textItem = (EditText) findViewById(R.id.boxItem);
-        String item = String.valueOf(textItem.getText());
+             item = String.valueOf(textItem.getText());
 
-        EditText textValue = (EditText) findViewById(R.id.boxValue);
-        String value = String.valueOf(textValue.getText());
+             value = String.valueOf(textValue.getText());
 
-        SeekBar textPercent = (SeekBar) findViewById(R.id.seekWaste);
-        String percent = String.valueOf(textPercent.getProgress());
+             percent = String.valueOf(textPercent.getProgress());
 
-        Spinner textReason = (Spinner) findViewById(R.id.spinReason);
-        String reason = String.valueOf(textReason.getSelectedItem());
+             reason = String.valueOf(textReason.getSelectedItem());
 
-        EditText textReflection = (EditText) findViewById(R.id.boxReflection);
-        String reflection = String.valueOf(textReflection.getText());
+             reflection = String.valueOf(textReflection.getText()); if (reflection == null) reflection = " ";
 
-        // We use a "long" for whatever reason (it doesn't crash, yay) to round the "wasted money" up to a whole number, based on the percent wasted.
-        long wasteMoney = Math.round(Double.parseDouble(value) * (Double.parseDouble(percent) / 100));
+            // We use a "long" for whatever reason (it doesn't crash, yay) to round the "wasted money" up to a whole number, based on the percent wasted.
+             wasteMoney = Math.round(Double.parseDouble(value) * (Double.parseDouble(percent) / 100));
 
-        // Calculate the wasted weight based on percent
-        double wasteWeight = (Double.parseDouble(weight) * (Double.parseDouble(percent) / 100));
+            // Calculate the wasted weight based on percent
+             wasteWeight = Math.round(Double.parseDouble(weight) * (Double.parseDouble(percent) / 100));
 
-        String log = MessageFormat.format("You threw out {0}% of {1} ({2} gram)\nWasted {3} kr", percent, item, wasteWeight, wasteMoney); // Success message
+             log = MessageFormat.format("You threw out {0}% of {1} ({2} gram)\nWasted {3} kr", percent, item, wasteWeight, wasteMoney); // Success message
+        }
+        catch(Exception e){
+            Toast.makeText(this, "Something went wrong!\nSee if you filled out the fields correctly!", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         try { // try and access the data database
             // This is what we'll be using for displaying data - it's time to figure out how the fuck we do that...
@@ -148,7 +160,7 @@ public class LogActivity extends AppCompatActivity {
             Toast.makeText(this, log, Toast.LENGTH_SHORT).show(); // Display success message when we're done saving the item
         } catch (Exception e) {
             Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show(); // Let them know there was an error
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Display that error, mostly for support purposes.
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show(); // Display that error, mostly for support purposes.
         }
 
         // So, we've logged the data, but if it's a new item, we also want to add it to the items database
@@ -176,8 +188,8 @@ public class LogActivity extends AppCompatActivity {
                             Toast.makeText(this, item + " == " + compItem, Toast.LENGTH_SHORT).show(); //
                             inputReader.close();
                             fis.close();
-                            newItem = false; // not a new item
-                            Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list: '" + chosenCategory + " products'", Toast.LENGTH_SHORT).show();
+                            newItem = false; // WE FOUND A MATCH SO IT'S NOT A NEW ITEM == DONT ADD TO fileItems
+                            Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list in the future :)", Toast.LENGTH_LONG).show();
                             return; // If we find a match we stop the while-loop
                         }
                     }
@@ -189,21 +201,22 @@ public class LogActivity extends AppCompatActivity {
                 }
             }
 
-            if (newItem) { // if there was no match in the items database, we're gonna add the item
-                try {
-                    FileOutputStream fos = new FileOutputStream(fileItems, true);
-                    OutputStreamWriter writer = new OutputStreamWriter(fos);
-                    writer.write(chosenCategory + "\n");
-                    writer.write(item + "\n");
-                    writer.write(weight + "\n");
-                    writer.write(value + "\n");
-                    writer.close();
-                    fos.close();
-                    Toast.makeText(this, "New item '" + item + "' added!", Toast.LENGTH_SHORT).show();
-                    newItem = false;
-                } catch (Exception e) {
-                    Toast.makeText(this, "Encountered an error writing to file!\nItem has not been saved.", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                if (newItem) { // if there was no match in the items database, we're gonna add the item
+                    try {
+                        FileOutputStream fos = new FileOutputStream(fileItems, true);
+                        OutputStreamWriter writer = new OutputStreamWriter(fos);
+                        writer.write(chosenCategory + "\n");
+                        writer.write(item + "\n");
+                        writer.write(weight + "\n");
+                        writer.write(value + "\n");
+                        writer.close();
+                        fos.close();
+                        Toast.makeText(this, "New item '" + item + "' added!", Toast.LENGTH_SHORT).show();
+                        newItem = false;
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Encountered an error writing to file!\nItem has not been saved.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }

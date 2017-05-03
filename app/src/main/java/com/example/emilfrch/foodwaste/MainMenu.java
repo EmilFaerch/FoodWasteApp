@@ -42,15 +42,15 @@ public class MainMenu extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
 
-        // Setting the path of the file (this wouldn't be in the actual app, as we don't want a default database)
+        // Setting the path of the file (this wouldn't be here in the actual app, as we don't want a default database)
         File fileItems = new File(getExternalFilesDir(null)+ "/items.txt"); // we get the external files directory of the phone and create a text file called "items" in there.
-        File fileData = new File(getExternalFilesDir(null) + "/data.txt");
+        File fileData = new File(getExternalFilesDir(null) + "/data.txt");  // and the same for the waste database.
 
         // Quickly clearing databases for testing purposes only
-        fileItems.delete();
-        fileData.delete();
+        // fileItems.delete();
+        // fileData.delete();
             /*
-            // for testing purposes
+            // for hard-coding databases -----------------------------
            if (fileItems.exists() == false){ // if there's no default database ...
                 try { // ... we try and create one
                     FileOutputStream fos = new FileOutputStream(fileItems, true); // Need to read up on this part. Basically we say we want access to this File (true means it adds text instead of overwriting the file)
@@ -158,7 +158,7 @@ public class MainMenu extends AppCompatActivity {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Display that error, mostly for support purposes.
             }
         }
-        */
+       */
     }
 
     public void showCategories(View v) { // the Log Waste button to open the Categories-activity

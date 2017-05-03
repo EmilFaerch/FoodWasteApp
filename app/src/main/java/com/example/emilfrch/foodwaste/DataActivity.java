@@ -25,13 +25,12 @@ public class DataActivity extends AppCompatActivity {
 
     File fileData;
     String week, day, category, item, weight, value, percent, reason, comment; // Variables that will temporarily hold the info that we are reading from "data.txt"
-    int d1Money, d1Weight, d2Money, d2Weight, d3Money, d3Weight, d4Money, d4Weight, d5Money, d5Weight, d6Money, d6Weight, d7Money, d7Weight; // Dont worry, not complex - just annoying ...
+    int d1Money, d1Weight, d2Money, d2Weight, d3Money, d3Weight, d4Money, d4Weight, d5Money, d5Weight, d6Money, d6Weight, d7Money, d7Weight = 0; // Dont worry, not complex - just annoying ...
     // ... could probably have been done in a different way, but couldn't really apply it to the different barcharts then - wouldn't save me any time to do it other way anyway
 
-    Calendar cal = Calendar.getInstance();
-    int viewWeek = cal.get(Calendar.WEEK_OF_YEAR); // viewWeek is the week we would like to see (By default we wanna see the current week)
-    int viewDay = cal.get(Calendar.DAY_OF_WEEK); // viewWeek is the week we would like to see (By default we wanna see the current week)
-
+    Calendar cal = Calendar.getInstance();          // Need to getInstance, or else else it will return Week as "3" for some reason
+    int viewWeek = cal.get(Calendar.WEEK_OF_YEAR);  // viewWeek is the week we would like to see (By default we wanna see the current week)
+    
     TextView weekNumber; // Text header
 
     // Color codes for the BarCharts
@@ -51,17 +50,16 @@ public class DataActivity extends AppCompatActivity {
         toolbar.setTitle("Your Data");
 
         weekNumber = (TextView) findViewById(R.id.txtWeekNumber); // Text Header
-        fileData = new File(getExternalFilesDir(null) + "/data.txt");
 
-        // THIS IS IMPORTANT - used for logging to the right day
-        viewDay--; // Day 1 is Sunday ( I found out -_-' ), we obviously want Monday to be 1, so we subtract 1
-        if (viewDay == 0) viewDay = 7; // but when it's actually Sunday it'll be 1 - 1 = 0; so we set it to 7 (our Sunday)
+        fileData = new File(getExternalFilesDir(null) + "/data.txt");
 
         readData(null);
     }
 
+    // The reason why this is a method is because we would call this whenever we clicked a "Next" or "Previous Week" button - we would go through the database again ...
     public void readData(View view){
-        weekNumber.setText("Week #" + String.valueOf(viewWeek)); // Update the textview in case we clicked to see another week
+        // ... which is why we set the Text Header here, so we can ...
+        weekNumber.setText("Week #" + String.valueOf(viewWeek)); // ... update the textview in case we clicked to see another week ^
 
         if (fileData.exists() == false) {
             Toast.makeText(this, "Nothing to display yet", Toast.LENGTH_SHORT).show();

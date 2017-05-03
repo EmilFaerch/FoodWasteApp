@@ -99,16 +99,45 @@ public class ItemsActivity extends AppCompatActivity {
     // Accessing the Logging-activity
     // We're using the same method for opening the new activity, so we need to see ...
     public void itemAdd(View v) {
-        if (!pickItem) itemValue = null; // if we didn't choose an existing item, we must have pressed the "+" button and we would not want the "Item" field filled out in the next screen
-
-        // ... if we chose an existing item, then pass along all the values of that item, ready for easy logging
-        Intent i = new Intent(ItemsActivity.this, LogActivity.class); //
+        Intent i = new Intent(ItemsActivity.this, LogActivity.class);
         i.putExtra("chosenCategory", chosenCategory); // Pass the category along again so we know what to save the item as
-        i.putExtra("clickedItem", itemValue); // and pass along the name of the chosen item as well (doesn't matter if it's null or not)
-        i.putExtra("clickedWeight", weight);
-        i.putExtra("clickedValue", value);
-        startActivity(i);
-        pickItem = false; // reset pickItem
-    }
+        // Important! We need to know what category to save to or it won't display it when we click a category - it will work in Data Visualization however.
 
+        if (!pickItem){
+            itemValue = null; // if we didn't choose an existing item, we must have pressed the "+" button and we would not want the "Item" field filled out in the next screen
+            i.putExtra("clickedItem", itemValue); // and pass along the name of the chosen item as well (doesn't matter if it's null or not)
+            // Important! ^
+        }
+        else {
+            if (fileItems.exists()) {
+                try { // always try, because Streams can cause a lot of stuff.
+
+                    // Attaching BufferedReader to the FileInputStream by the help of InputStreamReader - don't know wtf this means
+                    FileInputStream fis = new FileInputStream(fileItems); // Again, we wanna access this file
+                    BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis)); // But now we're using a BufferedReader to read from the file.
+
+                    // read a line and check if it's not empty; we continue to read from the code while it's not empty
+                    while ((category = inputReader.readLine()) != null) { // Because of the way we formatted the database, if there's 1 line, we know that there are at least 3 more to read from (4 for each item)
+                        item = inputReader.readLine(); // So if there's a category (e.g. "Fruit"), we also read the next 3 lines, even though we don't use them, other than basically skipping through the database
+                        weight = inputReader.readLine();
+                        value = inputReader.readLine();
+
+                        // So, if the category from the file (e.g. "Fruit") matches the category that we've kept track of that we are in (e.g. "Fruit");
+                        if (category.equals(chosenCategory) && item.equals(itemValue)) { // check to see if the string is equal to the other string ( the "==" check doesn't work here for some reason, found that out the hard way)
+                            // ... if we chose an existing item, then pass along all the values of that item, ready for easy logging
+                            i.putExtra("clickedItem", itemValue); // and pass along the name of the chosen item as well (doesn't matter if it's null or not)
+                            i.putExtra("clickedWeight", weight);
+                            i.putExtra("clickedValue", value);
+                            pickItem = false;
+                        }
+                    } // if there are no more lines in our database
+                    inputReader.close(); // Close that shit up
+                    fis.close();
+                } catch (Exception e) {
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Catch and display any error
+                }
+            }
+        }
+        startActivity(i);
+    }
 }

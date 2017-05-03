@@ -29,16 +29,16 @@
 
     <TextView
         android:id="@+id/txtWeekNumber"
-        android:layout_width="148dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Week #"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
