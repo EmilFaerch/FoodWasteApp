@@ -30,8 +30,9 @@ public class LogActivity extends AppCompatActivity {
     String chosenCategory, clickedItem, clickedWeight, clickedValue; // variables we sent from the previous activity
     boolean newItem = true; // start our assuming it's a new item (that we clicked "+")
 
-    Calendar cal = Calendar.getInstance(Locale.getDefault());
+    Calendar cal = Calendar.getInstance(Locale.getDefault()); // Need to getInstance, or else else it will return Week as "3" for some reason
     int viewDay = cal.get(Calendar.DAY_OF_WEEK); // viewWeek is the week we would like to see (By default we wanna see the current week)
+    int viewWeek = cal.get(Calendar.WEEK_OF_YEAR);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,6 @@ public class LogActivity extends AppCompatActivity {
 
         EditText textValue = (EditText) findViewById(R.id.boxValue);
         String value = String.valueOf(textValue.getText());
-        int intValue = Integer.parseInt(value); // turn the String into a int, so we can MATH it
 
         SeekBar textPercent = (SeekBar) findViewById(R.id.seekWaste);
         String percent = String.valueOf(textPercent.getProgress());
@@ -123,65 +123,70 @@ public class LogActivity extends AppCompatActivity {
         String reflection = String.valueOf(textReflection.getText());
 
         // We use a "long" for whatever reason (it doesn't crash, yay) to round the "wasted money" up to a whole number, based on the percent wasted.
-        long waste = Math.round(Double.parseDouble(value) * (Double.parseDouble(percent) / 100));
+        long wasteMoney = Math.round(Double.parseDouble(value) * (Double.parseDouble(percent) / 100));
 
-        String log = MessageFormat.format("You threw out {0}% of {1} ({2} gram)\nWasted {3} kr", percent, item, weight, waste); // Success message
+        // Calculate the wasted weight based on percent
+        double wasteWeight = (Double.parseDouble(weight) * (Double.parseDouble(percent) / 100));
+
+        String log = MessageFormat.format("You threw out {0}% of {1} ({2} gram)\nWasted {3} kr", percent, item, wasteWeight, wasteMoney); // Success message
 
         try { // try and access the data database
             // This is what we'll be using for displaying data - it's time to figure out how the fuck we do that...
             FileOutputStream fos = new FileOutputStream(fileData, true); // true for adding, false for overwriting
             OutputStreamWriter writer = new OutputStreamWriter(fos);
-            writer.write(Calendar.WEEK_OF_YEAR + "\n"); // adding the week number first
+            writer.write(viewWeek + "\n"); // adding the week number first
             writer.write(viewDay + "\n"); // Day of week (1 for monday and so on) - adding "\n" to create a new line ...
             writer.write(chosenCategory + "\n"); // ... otherwise it would write e.g: 192FruitApple20350Too OldVacation, which looks fucking horrible and useless for our formatting.
             writer.write(item + "\n");           // follows the same format of the items list, then because this is the waste data we include percent, reason, and reflection
-            writer.write(weight + "\n");
-            writer.write(waste + "\n");
+            writer.write(wasteWeight + "\n");
+            writer.write(wasteMoney + "\n");
             writer.write(percent + "\n");
             writer.write(reason + "\n");
             writer.write(reflection + "\n");
             writer.close();
             fos.close();
-            Toast.makeText(this, log, Toast.LENGTH_SHORT).show(); // Display success message when we're done
-            Toast.makeText(this, "Logged in day #" + viewDay, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, log, Toast.LENGTH_SHORT).show(); // Display success message when we're done saving the item
         } catch (Exception e) {
             Toast.makeText(this, "Encountered an error writing to file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show(); // Let them know there was an error
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Display that error, mostly for support purposes.
         }
-        // So, we've logged the data, but if it's a new item, we also want to add it to the items database
 
+        // So, we've logged the data, but if it's a new item, we also want to add it to the items database
         if (newItem) { // if we clicked the "+" button
+            // Make some temporary variables that we use to compare our actual variables
             String compCategory = chosenCategory;
             String compItem = item;
             String compWeight = weight;
             String compValue = value;
 
-            try { // Check to see if the item already exists in the items database by reading through the "items"
-                FileInputStream fis = new FileInputStream(fileItems);
-                BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis));
+            if (fileItems.exists()) {
+                try { // Check to see if the item already exists in the items database by reading through the "items"
+                    FileInputStream fis = new FileInputStream(fileItems);
+                    BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis));
 
-                // Again, reading the file 4 lines at a time as previously
-                while ((compCategory = inputReader.readLine()) != null) {
-                    compItem = inputReader.readLine();
-                    compWeight = inputReader.readLine();
-                    compValue = inputReader.readLine();
+                    // Again, reading the file 4 lines at a time as previously
+                    while ((compCategory = inputReader.readLine()) != null) {
+                        compItem = inputReader.readLine();
+                        compWeight = inputReader.readLine();
+                        compValue = inputReader.readLine();
 
-                    // I wanted to display weight and value for each item, so you could have "Rye bread 500g 8 kroner" and "Rye bread 1000g 15 kroner", instead of having 1 rye bread for all,
-                    // but RelativeLayout was a bitch, so that's not happening. You can actually have different Rye Bread, but you wont be able to see it until you choose it.
-                    if (chosenCategory.equals(compCategory) && item.equals(compItem) && weight.equals(compWeight) && value.equals(compValue)) { // Checking for identical item
-                        Toast.makeText(this, item + " == " + compItem, Toast.LENGTH_SHORT).show(); //
-                        inputReader.close();
-                        fis.close();
-                        newItem = false; // not a new item
-                        Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list: '" + chosenCategory + " products'", Toast.LENGTH_SHORT).show();
-                        return; // If we find a match we stop the while-loop
+                        // I wanted to display weight and value for each item, so you could have "Rye bread 500g 8 kroner" and "Rye bread 1000g 15 kroner", instead of having 1 rye bread for all,
+                        // but RelativeLayout was a bitch, so that's not happening. You can actually have different Rye Bread, but you wont be able to see it until you choose it.
+                        if (chosenCategory.equals(compCategory) && item.equals(compItem) && weight.equals(compWeight) && value.equals(compValue)) { // Checking for identical item
+                            Toast.makeText(this, item + " == " + compItem, Toast.LENGTH_SHORT).show(); //
+                            inputReader.close();
+                            fis.close();
+                            newItem = false; // not a new item
+                            Toast.makeText(getCurrentFocus().getContext(), "This item has already been submitted.\nPlease select it on the list: '" + chosenCategory + " products'", Toast.LENGTH_SHORT).show();
+                            return; // If we find a match we stop the while-loop
+                        }
                     }
+                    inputReader.close();
+                    fis.close();
+                } catch (Exception e) {
+                    Toast.makeText(this, "Encountered an error reading from file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
-                inputReader.close();
-                fis.close();
-            } catch (Exception e) {
-                Toast.makeText(this, "Encountered an error reading from file!\nEntry has not been logged.", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
             }
 
             if (newItem) { // if there was no match in the items database, we're gonna add the item

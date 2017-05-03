@@ -47,9 +47,9 @@ public class MainMenu extends AppCompatActivity {
         File fileData = new File(getExternalFilesDir(null) + "/data.txt");
 
         // Quickly clearing databases for testing purposes only
-        //fileItems.delete();
+        fileItems.delete();
         fileData.delete();
-
+            /*
             // for testing purposes
            if (fileItems.exists() == false){ // if there's no default database ...
                 try { // ... we try and create one
@@ -158,6 +158,7 @@ public class MainMenu extends AppCompatActivity {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Display that error, mostly for support purposes.
             }
         }
+        */
     }
 
     public void showCategories(View v) { // the Log Waste button to open the Categories-activity

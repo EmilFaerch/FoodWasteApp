@@ -111,7 +111,7 @@ public class BarGraph extends View {
             if (showBarText) {
                 this.p.setTextSize(40); // This does nothing
                 this.p.getTextBounds(unit, 0, 1, r3);
-                usableHeight = getHeight(); // - bottomPadding - Math.abs(r3.top - r3.bottom) - 26;
+                usableHeight = getHeight() - bottomPadding - Math.abs(r3.top - r3.bottom) - 26;
             } else {
                 usableHeight = getHeight() - bottomPadding;
             }

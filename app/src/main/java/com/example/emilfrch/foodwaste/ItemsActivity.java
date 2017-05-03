@@ -69,30 +69,31 @@ public class ItemsActivity extends AppCompatActivity {
 
     // Reading from our database to fill out our listview
     public void readFile(View v){
-        try { // always try, because Streams can cause a lot of stuff.
+        if (fileItems.exists()) {
+            try { // always try, because Streams can cause a lot of stuff.
 
-            // Attaching BufferedReader to the FileInputStream by the help of InputStreamReader - don't know wtf this means
-            FileInputStream fis = new FileInputStream(fileItems); // Again, we wanna access this file
-            BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis)); // But now we're using a BufferedReader to read from the file.
+                // Attaching BufferedReader to the FileInputStream by the help of InputStreamReader - don't know wtf this means
+                FileInputStream fis = new FileInputStream(fileItems); // Again, we wanna access this file
+                BufferedReader inputReader = new BufferedReader(new InputStreamReader(fis)); // But now we're using a BufferedReader to read from the file.
 
-            // read a line and check if it's not empty; we continue to read from the code while it's not empty
-            while ((category = inputReader.readLine()) != null) { // Because of the way we formatted the database, if there's 1 line, we know that there are at least 3 more to read from (4 for each item)
-                item = inputReader.readLine(); // So if there's a category (e.g. "Fruit"), we also read the next 3 lines, even though we don't use them, other than basically skipping through the database
-                weight = inputReader.readLine();
-                value = inputReader.readLine();
+                // read a line and check if it's not empty; we continue to read from the code while it's not empty
+                while ((category = inputReader.readLine()) != null) { // Because of the way we formatted the database, if there's 1 line, we know that there are at least 3 more to read from (4 for each item)
+                    item = inputReader.readLine(); // So if there's a category (e.g. "Fruit"), we also read the next 3 lines, even though we don't use them, other than basically skipping through the database
+                    weight = inputReader.readLine();
+                    value = inputReader.readLine();
 
                     // So, if the category from the file (e.g. "Fruit") matches the category that we've kept track of that we are in (e.g. "Fruit");
                     if (category.equals(chosenCategory)) { // check to see if the string is equal to the other string ( the "==" check doesn't work here for some reason, found that out the hard way)
                         items.add(item); // if the categories match, we want to add the item to the list
                         // NOTICE THAT WE DON'T ADD THE ITEM TO THE LISTVIEW, BUT RATHER THE ADAPTER - you add items to an adapter and add the adapter to the listview (BECAUSE WHY MAKE IT SIMPLE)
                     }
-            } // if there are no more lines in our database
-            inputReader.close(); // Close that shit up
-            fis.close();
-        }
-        catch (Exception e) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Catch and display any error
-        }
+                } // if there are no more lines in our database
+                inputReader.close(); // Close that shit up
+                fis.close();
+            } catch (Exception e) {
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show(); // Catch and display any error
+            }
+        } else Toast.makeText(this, "No items to display here yet.\nClick the + to get started!", Toast.LENGTH_SHORT).show();
     }
 
     // Accessing the Logging-activity
