@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:drawable/screen_background_light_transparent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.emilfrch.foodwaste.CategoriesActivity"
     tools:showIn="@layout/activity_categories">
@@ -52,10 +53,12 @@
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categorySweets"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnVegetables"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/sweets" />
 
     <ImageButton
         android:id="@+id/btnVegetables"
@@ -64,11 +67,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="24dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryVegetables"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toRightOf="@+id/btnMeat"
         app:layout_constraintRight_toLeftOf="@+id/btnFish"
         app:layout_constraintTop_toBottomOf="@+id/txtRicePasta"
-        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+        app:srcCompat="@mipmap/vegetables" />
 
     <ImageButton
         android:id="@+id/btnOther"
@@ -76,10 +81,12 @@
         android:layout_height="90dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryOther"
+        android:scaleType="centerCrop"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnVegetables"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/other" />
 
     <ImageButton
         android:id="@+id/btnMeat"
@@ -87,10 +94,12 @@
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryMeat"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnRice"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/meat" />
 
     <TextView
         android:id="@+id/txtMeat"
@@ -112,11 +121,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="24dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryRice"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toRightOf="@+id/btnMeat"
         app:layout_constraintRight_toLeftOf="@+id/btnFish"
         app:layout_constraintTop_toBottomOf="@+id/txtFruit"
-        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+        app:srcCompat="@mipmap/rice" />
 
     <TextView
         android:id="@+id/txtRicePasta"
@@ -136,10 +147,12 @@
         android:layout_height="90dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categorySeafood"
+        android:scaleType="centerCrop"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnRice"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/seafood" />
 
     <TextView
         android:id="@+id/txtSeafood"
@@ -160,12 +173,14 @@
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryCorn"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toRightOf="@+id/btnBakery"
         app:layout_constraintRight_toLeftOf="@+id/btnDairyProducts"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+        app:srcCompat="@mipmap/corn" />
 
     <ImageButton
         android:id="@+id/btnBakery"
@@ -173,10 +188,13 @@
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:elevation="0dp"
         android:onClick="categoryBakery"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnCornProducts"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/bakery" />
 
     <ImageButton
         android:id="@+id/btnDairyProducts"
@@ -184,10 +202,12 @@
         android:layout_height="90dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryDairy"
+        android:scaleType="centerCrop"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnCornProducts"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/dairy" />
 
     <TextView
         android:id="@+id/txtBread"
@@ -206,13 +226,13 @@
         android:id="@+id/txtCorn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Corn Products"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/btnCornProducts"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/btnCornProducts"
-        app:layout_constraintHorizontal_bias="1.0"
         android:layout_marginTop="0dp"
+        android:text="Corn Products"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="@+id/btnCornProducts"
+        app:layout_constraintRight_toRightOf="@+id/btnCornProducts"
         app:layout_constraintTop_toBottomOf="@+id/btnCornProducts" />
 
     <TextView
@@ -247,10 +267,12 @@
         android:layout_height="90dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryLeftovers"
+        android:scaleType="centerCrop"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnFruit"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/leftover" />
 
     <ImageButton
         android:id="@+id/btnFruit"
@@ -259,11 +281,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="24dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryFruits"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toRightOf="@+id/btnDrinks"
         app:layout_constraintRight_toLeftOf="@+id/btnLeftovers"
         app:layout_constraintTop_toBottomOf="@+id/txtCorn"
-        app:srcCompat="?android:attr/listChoiceIndicatorMultiple" />
+        app:srcCompat="@mipmap/fruit" />
 
     <TextView
         android:id="@+id/txtFruit"
@@ -292,12 +316,15 @@
 
     <ImageButton
         android:id="@+id/btnDrinks"
+        style="@android:style/Widget.DeviceDefault.ImageButton"
         android:layout_width="110dp"
         android:layout_height="90dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
+        android:background="@android:drawable/screen_background_light_transparent"
         android:onClick="categoryDrinks"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnFruit"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@mipmap/drinks" />
 </android.support.constraint.ConstraintLayout>
